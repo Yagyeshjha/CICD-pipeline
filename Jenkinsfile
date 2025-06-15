@@ -3,6 +3,7 @@ pipeline {
     
     tools {
         terraform 'jenkins-terraform'
+        git 'DefaultGit'
     }
     stages {
         stage ("checkout from GIT") {
