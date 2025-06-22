@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Terraform Init') {
           steps {
-            withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            withCredentials([usernamePassword(credentialsId: 'aws-credential', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
               sh '''
                 terraform init
               '''
@@ -27,7 +27,7 @@ pipeline {
         }
         stage ("terrafrom plan") {
            steps {
-             withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+             withCredentials([usernamePassword(credentialsId: 'aws-credential', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
               sh '''
                 terraform plan
               '''
@@ -36,7 +36,7 @@ pipeline {
         }
         stage ("terraform apply") {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([usernamePassword(credentialsId: 'aws-credential', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                  sh '''
                   terraform apply --auto-approve
                  '''
