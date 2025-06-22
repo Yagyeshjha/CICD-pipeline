@@ -6,16 +6,15 @@ pipeline {
         git 'DefaultGit'
     }
     stages {
-        stage ("checkout from GIT") {
-            steps {
-                git branch: 'main', url: 'https://github.com/Yagyeshjha/CICD-pipeline'
+        stage('Terraform Init') {
+          steps {
+            withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+              sh '''
+                terraform init
+              '''
             }
-        }
-        stage ("terraform init") {
-            steps {
-                sh 'terraform init'
-            }
-        }
+          }
+        } 
         stage ("terraform fmt") {
             steps {
                 sh 'terraform fmt'
@@ -27,13 +26,22 @@ pipeline {
             }
         }
         stage ("terrafrom plan") {
-            steps {
-                sh 'terraform plan '
+           steps {
+             withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+              sh '''
+                terraform plan
+              '''
             }
+          }
         }
         stage ("terraform apply") {
             steps {
-                sh 'terraform apply --auto-approve'
+                withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                 sh '''
+                  terraform apply --auto-approve
+                 '''
+                }
+               }
             }
         }
     }
